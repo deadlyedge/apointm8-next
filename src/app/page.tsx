@@ -1,5 +1,3 @@
-import DateSelector from "@/components/dateSelector"
-import DurationSelector from "@/components/durationSelector"
 import Header from "@/components/header"
 import TimeSelector from "@/components/timeSelector"
 import { Button } from "@/components/ui/button"
@@ -18,11 +16,7 @@ export default function Home() {
         type='email'
         placeholder='Email'
       />
-      <div className='flex flex-col flex-wrap items-start justify-start w-96 sm:w-[800px] mx-auto sm:h-[400px] gap-3'>
-          <DateSelector />
-          <TimeSelector />
-          <DurationSelector />
-      </div>
+      <TimeSelector />
     </div>
   )
 }

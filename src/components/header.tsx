@@ -5,14 +5,16 @@ const Header = () => {
   return (
     <header className='bg-primary/20'>
       <nav className='flex items-center justify-between max-w-4xl mx-auto p-3'>
-        <Link href='/'>
+        <Link href='/' className="flex items-center justify-center">
           <Image
             src='/logo_with_text.svg'
             alt='logo_with_text'
             width={160}
             height={40}
-            className=""
+            className="h-auto"
+            priority
           />
+          <span className='ml-2 text-2xl'>a-point-mate</span>
         </Link>
 
         <ul className='flex items-center justify-center space-x-4'>
