@@ -1,9 +1,9 @@
 import DateSelector from "@/components/dateSelector"
+import DurationSelector from "@/components/durationSelector"
 import Header from "@/components/header"
+import TimeSelector from "@/components/timeSelector"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Slider } from "@/components/ui/slider"
-import Image from "next/image"
 
 export default function Home() {
   return (
@@ -18,13 +18,11 @@ export default function Home() {
         type='email'
         placeholder='Email'
       />
-      <Image
-        src='/logo_with_text.svg'
-        alt='logo_with_text'
-        width={160}
-        height={40}></Image>
-      <DateSelector />
-      <Slider defaultValue={[1]} max={3} min={1} step={1} className="w-40"/>
+      <div className='flex flex-col flex-wrap items-start justify-start w-96 sm:w-[800px] mx-auto sm:h-[400px] gap-3'>
+          <DateSelector />
+          <TimeSelector />
+          <DurationSelector />
+      </div>
     </div>
   )
 }

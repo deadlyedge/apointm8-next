@@ -9,7 +9,7 @@ const DateSelector = () => {
   const [selected, setSelected] = useState<Date>()
 
   return (
-    <div>
+    <div className="flex flex-col items-center justify-center whitespace-nowrap rounded-md border w-96">
       <Calendar
         mode='single'
         selected={selected}
@@ -19,8 +19,9 @@ const DateSelector = () => {
         footer={
           selected
             ? `Selected: ${format(selected, "MMMM dd", { locale: zhCN })}`
-            : "Pick a day."
+            : "选择日期"
         }
+        className=""
       />
     </div>
   )
