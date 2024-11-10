@@ -1,0 +1,120 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         String @id @default(cuid())
+  email      String @unique
+  password   String
+  name       String
+  reputation Int    @default(0)
+  // role             Role             @default(CUSTOMER) // Default role
+
+  comments         Comment[]        @relation("CommentAuthor")
+  services         Service[]
+  notifications    Notification[]
+  privacySettings  PrivacySettings? @relation(fields: [privacySettingsId], references: [id])
+  receivedComments Comment[]        @relation("CommentRecipient") // Added for recipient relation
+
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime
+  privacySettingsId String?
+}
+
+model Service {
+  id          String @id @default(cuid())
+  userId      String
+  user        User   @relation(fields: [userId], references: [id])
+  title       String
+  description String
+  price       Float? @default(0.0)
+
+  availableTimes AvailableTime[]
+  appointments   Appointment[]
+  statistics     ServiceStatistics?
+  comments       Comment[]          @relation("ServiceComments") // Link comments to services
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime
+}
+
+model AvailableTime {
+  id        String   @id @default(cuid())
+  serviceId String
+  service   Service  @relation(fields: [serviceId], references: [id])
+  startTime DateTime
+  endTime   DateTime
+}
+
+model Appointment {
+  id        String    @id @default(cuid())
+  serviceId String
+  service   Service   @relation(fields: [serviceId], references: [id])
+  date      DateTime
+  status    Status
+  feedback  Comment[] @relation("AppointmentFeedback") // Link feedback directly to appointments
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime
+}
+
+model Comment {
+  id              String           @id @default(cuid())
+  authorId        String
+  author          User             @relation("CommentAuthor", fields: [authorId], references: [id])
+  recipientId     String
+  recipient       User             @relation("CommentRecipient", fields: [recipientId], references: [id])
+  content         String
+  hidden          Boolean          @default(false)
+  upvotes         Int              @default(0)
+  downvotes       Int              @default(0)
+  serviceId       String? // Optional link to service
+  service         Service?         @relation("ServiceComments", fields: [serviceId], references: [id]) // Removed unique constraint
+  isPrivate       Boolean          @default(false) // Privacy setting for comments
+  appointmentId   String? // Added to link comments to appointments
+  appointment     Appointment?     @relation("AppointmentFeedback", fields: [appointmentId], references: [id]) // Added for feedback relation
+  PrivacySettings PrivacySettings?
+}
+
+model Notification {
+  id      String  @id @default(cuid())
+  userId  String
+  user    User    @relation(fields: [userId], references: [id])
+  message String
+  isRead  Boolean @default(false)
+
+  createdAt DateTime @default(now())
+}
+
+model ServiceStatistics {
+  id               String  @id @default(cuid())
+  serviceId        String  @unique
+  service          Service @relation(fields: [serviceId], references: [id])
+  appointmentCount Int     @default(0)
+  feedbackCount    Int     @default(0)
+}
+
+model PrivacySettings {
+  id                 String  @id @default(cuid())
+  authorId           String  @unique
+  comment            Comment @relation(fields: [authorId], references: [id])
+  commentsVisibility Boolean @default(true) // Control visibility of comments
+  User               User[]
+}
+
+enum Role {
+  CUSTOMER
+  PROVIDER
+}
+
+enum Status {
+  PENDING
+  CONFIRMED
+  COMPLETED
+  CANCELLED
+}
