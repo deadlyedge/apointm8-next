@@ -3,7 +3,7 @@ import TimeSelector from "@/components/timeSelector"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 
-export default function Home() {
+export default function HomePage() {
   return (
     <div>
       <Header />
