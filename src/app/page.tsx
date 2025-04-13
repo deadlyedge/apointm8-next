@@ -16,7 +16,6 @@ export default function HomePage() {
         type='email'
         placeholder='Email'
       />
-      <TimeSelector />
     </div>
   )
 }
